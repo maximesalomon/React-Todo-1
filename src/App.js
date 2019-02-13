@@ -1,27 +1,64 @@
 import React from 'react';
-
-import Todo from './components/TodoComponents/Todo.js'
-import TodoForm from './components/TodoComponents/TodoForm.js'
-import TodoList from './components/TodoComponents/TodoList.js'
+import TodoList from './components/TodoComponents/TodoList';
+import TodoForm from './components/TodoComponents/TodoForm';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-        tasks: [{message: 'Task 1', id:'123', completed: false}, {message: 'Task 1', id:'123', completed: false}, {message: 'Task 1', id:'123', completed: false}],
-    }
-}
+      todos: [
+        {
+          task: '',
+          id: null,
+          completed: false
+        }
+      ],
+      todo: ''
+    };
+  }
+  
+  addTodo = e => {
+    e.preventDefault();
+    const todos = this.state.todos.slice();
+    todos.push({ task: this.state.todo, completed: false, id: Date.now() });
+    this.setState({ todos, todo: '' });
+  };
 
-addTask = taskName => {
-  this.setState(st => ({ tasks: st.tasks.concat({ message: taskName }) }));
-}
+  changeTodo = e => this.setState({ [e.target.name]: e.target.value });
+
+  toggleTodoComplete = id => {
+    let todos = this.state.todos.slice();
+    todos = todos.map(todo => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+        return todo;
+      } else {
+        return todo;
+      }
+    });
+    this.setState({ todos });
+  };
+
+  clearCompletedTodos = e => {
+    e.preventDefault();
+    let todos = this.state.todos.slice();
+    todos = todos.filter(todo => !todo.completed);
+    this.setState({ todos });
+  };
 
   render() {
     return (
       <div>
-        <h2>Todo List: MVP</h2>
-        <TodoForm addTask={this.addTask} />
-        <TodoList tasks={this.state.tasks} />
+        <TodoForm
+          value={this.state.todo}
+          handleTodoChange={this.changeTodo}
+          handleAddTodo={this.addTodo}
+          handleClearTodos={this.clearCompletedTodos}
+        />
+        <TodoList
+          handleToggleComplete={this.toggleTodoComplete}
+          todos={this.state.todos}
+        />
       </div>
     );
   }
