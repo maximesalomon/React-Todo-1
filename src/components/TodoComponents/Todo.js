@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TodoForm from './TodoForm.js';
-import TodoList from './TodoList.js';
+import TodoForm from './TodoForm.js'
+import TodoList from './TodoList.js'
 
 class Todo extends React.Component {
     constructor(props) {
